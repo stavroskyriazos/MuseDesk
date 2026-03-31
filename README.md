@@ -1,4 +1,4 @@
-# Helpdesk-Ticketing-System-
+# Helpdesk Ticketing System
 
 This Project is an open-source helpdesk ticketing system. 
 
