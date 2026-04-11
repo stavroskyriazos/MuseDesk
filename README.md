@@ -1,6 +1,6 @@
 # Helpdesk Ticketing System
 
-This Project is an open-source helpdesk ticketing system. 
+This Project is an open-source helpdesk & ticketing system for museums. 
 
 ## Objectives 
 - Develop a functional helpdesk system using open-source technologies
@@ -16,4 +16,5 @@ This Project is an open-source helpdesk ticketing system.
 
 ## Tech Stack 
 - Zammad
+- Docker
 - Github
