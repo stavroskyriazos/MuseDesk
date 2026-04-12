@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  zammad-postgresql:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: zammad
+      POSTGRES_PASSWORD: zammad
+    restart: always
+
+  zammad-redis:
+    image: redis:6
+    restart: always
+
+  zammad-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    environment:
+      - discovery.type=single-node
+    restart: always
+
+  zammad:
+    image: zammad/zammad:latest
+    depends_on:
+      - zammad-postgresql
+      - zammad-redis
+      - zammad-elasticsearch
+    ports:
+      - "8080:80"
+    restart: always
