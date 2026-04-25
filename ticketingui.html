@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets</title>
+<style>
+body { background:#f3f4f6; font-family:Arial; }
+.container { width:500px; margin:auto; background:white; padding:20px; }
+button { background:#1e3a8a; color:white; }
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2>Create Ticket</h2>
+
+<input id="title"><br><br>
+<textarea id="description"></textarea><br><br>
+
+<button onclick="createTicket()">Submit</button>
+
+<h3>All Tickets</h3>
+<ul id="list"></ul>
+</div>
+
+<script>
+function createTicket(){
+fetch('http://127.0.0.1:5000/api/tickets',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+title:title.value,
+description:description.value,
+user_id:localStorage.getItem("user_id")
+})
+}).then(loadTickets);
+}
+
+function loadTickets(){
+fetch('http://127.0.0.1:5000/api/tickets')
+.then(res=>res.json())
+.then(data=>{
+list.innerHTML="";
+data.forEach(t=>{
+let li=document.createElement("li");
+li.innerText=t.title + " - " + t.status;
+list.appendChild(li);
+});
+});
+}
+
+loadTickets();
+</script>
+</body>
+</html>
