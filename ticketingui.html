@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets</title>
+<style>
+body { background:#eef2f7; color:#172033; font-family:Arial, sans-serif; margin:0; }
+.container { width:min(820px, calc(100% - 32px)); margin:32px auto; background:white; padding:24px; border-radius:8px; box-shadow:0 10px 30px rgba(15,23,42,.08); }
+.topbar { align-items:center; display:flex; gap:12px; justify-content:space-between; margin-bottom:20px; }
+.topbar a, .topbar button { width:auto; }
+input, textarea, select { box-sizing:border-box; margin:8px 0 14px; padding:10px; width:100%; border:1px solid #cbd5e1; border-radius:6px; font:inherit; }
+textarea { min-height:100px; resize:vertical; }
+button { background:#1e3a8a; color:white; padding:10px 14px; border:none; border-radius:6px; cursor:pointer; font-weight:700; }
+.secondary { background:#475569; text-decoration:none; color:white; padding:10px 14px; border-radius:6px; }
+.message { min-height:22px; color:#b42318; }
+.ticket { border:1px solid #d7dee8; border-radius:8px; list-style:none; margin:12px 0; padding:14px; }
+.ticket h4 { margin:0 0 8px; }
+.ticket p { margin:0 0 10px; }
+.ticket-meta { color:#526173; font-size:14px; }
+#list { padding:0; }
+</style>
+</head>
+
+<body>
+<div class="container">
+<div class="topbar">
+  <div>
+    <h2>Museum Helpdesk</h2>
+    <div id="currentUser" class="ticket-meta"></div>
+  </div>
+  <div>
+    <a class="secondary" href="dahsboard.html">Dashboard</a>
+    <button onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<h2>Create Ticket</h2>
+
+<input id="title" placeholder="Ticket title">
+<textarea id="description" placeholder="Describe the issue"></textarea>
+
+<button onclick="createTicket()">Submit</button>
+<p id="message" class="message"></p>
+
+<h3>All Tickets</h3>
+<ul id="list"></ul>
+</div>
+
+<script>
+const API = window.location.origin;
+const userId = localStorage.getItem("user_id");
+
+if(!userId){
+  window.location = "login.html";
+}
+
+currentUser.textContent = `Signed in as ${localStorage.getItem("username") || "user"}`;
+
+async function createTicket(){
+  message.textContent = "";
+  const res = await fetch(`${API}/api/tickets`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      title:title.value,
+      description:description.value,
+      user_id:userId
+    })
+  });
+  const data = await res.json();
+  if(!res.ok){
+    message.textContent = data.message || "Could not create ticket";
+    return;
+  }
+  title.value = "";
+  description.value = "";
+  await loadTickets();
+}
+
+async function updateStatus(ticketId, status){
+  const res = await fetch(`${API}/api/tickets/${ticketId}`, {
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ status })
+  });
+  if(res.ok){
+    await loadTickets();
+  }
+}
+
+async function loadTickets(){
+  const res = await fetch(`${API}/api/tickets`);
+  const data = await res.json();
+  list.innerHTML="";
+  data.forEach(t=>{
+    const li=document.createElement("li");
+    li.className = "ticket";
+    li.innerHTML = `
+      <h4>${escapeHtml(t.title)}</h4>
+      <p>${escapeHtml(t.description)}</p>
+      <div class="ticket-meta">Created by ${escapeHtml(t.username || "Unknown")} - ${new Date(t.created_at).toLocaleString()}</div>
+      <select onchange="updateStatus(${t.id}, this.value)">
+        ${["Open", "In Progress", "Closed"].map(status => `<option ${status === t.status ? "selected" : ""}>${status}</option>`).join("")}
+      </select>
+    `;
+    list.appendChild(li);
+  });
+}
+
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[char]));
+}
+
+function logout(){
+  localStorage.clear();
+  window.location = "login.html";
+}
+
+loadTickets();
+</script>
+</body>
+</html>
