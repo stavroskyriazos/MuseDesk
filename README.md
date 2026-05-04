@@ -1,6 +1,6 @@
-# Helpdesk Ticketing System - MuseDesk
+# MuseDesk - Helpdesk Ticketing System  
 
-This Project is an open-source helpdesk & ticketing system for museums. 
+This Project is a small Flask & SQLite based helpdesk for support & ticketing system for museums. 
 
 ## Objectives 
 - Develop a functional helpdesk system using open-source technologies
@@ -13,8 +13,8 @@ This Project is an open-source helpdesk & ticketing system for museums.
 - Dashboard and ticket monitoring
 - API intergration with backend
 - Open Source Documentation
-
-## Tech Stack 
-- Zammad
-- Docker
-- Github
+- Register and log in
+- Create helpdesk tickets
+- View all tickets
+- Change ticket status to Open, In Progress, or Closed
+- View dashboard counts by status
