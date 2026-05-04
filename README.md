@@ -1,4 +1,4 @@
-# Helpdesk Ticketing System
+# Helpdesk Ticketing System - MuseDesk
 
 This Project is an open-source helpdesk & ticketing system for museums. 
 
