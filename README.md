@@ -1,4 +1,4 @@
-# MuseDesk - Helpdesk Ticketing System  
+# MuseDesk - An Open-Source Helpdesk Ticketing System  
 
 This Project is a small Flask & SQLite based helpdesk for support & ticketing system for museums. 
 
