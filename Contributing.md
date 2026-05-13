@@ -9,6 +9,7 @@ This project follows a collaborative and structured development approach using G
 
 * Afroditi: Login & Register API, Login & Register UI, Dashboard API & UI, Database
 * Stavros: Zammad & App Set Up, Documentation, Ticketing API & UI
+* Angeliki & George: Wiki & Documentation 
 
 Both members collaborate on testing and debugging of the project.
 
